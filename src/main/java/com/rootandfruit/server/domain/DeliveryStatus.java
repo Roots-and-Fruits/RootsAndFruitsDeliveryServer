@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum DeliveryStatus {
+
     // 접수완료
     ORDER_ACCEPTED("ORDER_ACCEPTED"),
     // 결제완료

@@ -1,6 +1,6 @@
 package com.rootandfruit.server.domain;
 
-import com.rootandfruit.server.global.BaseTimeEntity;
+import com.rootandfruit.server.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

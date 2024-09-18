@@ -1,5 +1,6 @@
 package com.rootandfruit.server.domain;
 
+import com.rootandfruit.server.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,17 +15,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
-public class Product {
+public class Product extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "product_name")
+    @Column(name = "product_name", nullable = false)
     private String productName ;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private int price ;
 
     @Column(name = "is_sailed")

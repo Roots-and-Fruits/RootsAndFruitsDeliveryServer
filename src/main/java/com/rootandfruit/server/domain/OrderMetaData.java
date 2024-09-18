@@ -1,6 +1,5 @@
 package com.rootandfruit.server.domain;
 
-import com.rootandfruit.server.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,23 +13,23 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "product")
-public class Product extends BaseTimeEntity {
+@Table(name = "ordermetadate")
+public class OrderMetaData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "product_name", nullable = false)
-    private String productName ;
+    // 주문번호 시퀀스 값
+    @Column(name = "order_number_sequence")
+    private int orderNumberSequence = 1000;
 
-    @Column(name = "price", nullable = false)
-    private int price ;
+    // 배송 가능 날짜 범위
+    @Column(name = "allowed_delivery_days")
+    private int allowedDeliveryDays;
 
-    @Column(name = "is_sailed")
-    private boolean isSailed ;
-
-    @Column(name = "is_deleted")
-    private boolean is_deleted ;
+    public int incrementOrderNumberSequence() {
+        return ++this.orderNumberSequence;
+    }
 }

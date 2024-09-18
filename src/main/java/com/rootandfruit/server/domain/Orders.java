@@ -1,5 +1,6 @@
 package com.rootandfruit.server.domain;
 
+import com.rootandfruit.server.global.common.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,25 +19,30 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
-public class Orders {
+public class Orders extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "product_count")
+    @Column(name = "product_count", nullable = false)
     private int productCount;
 
-    @Column(name = "order_number")
+    @Column(name = "order_number", nullable = false)
     private int orderNumber;
 
-    // Order와 Product 간의 다대일 관계
+    // 주문과 사용자 간의 다대일 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
+    // 주문과 상품 간의 다대일 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    // Order와 DeliveryInfo 간의 다대일 관계
+    // 주문과 배송정보 간의 다대일 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_info_id", nullable = false)
     private DeliveryInfo deliveryInfo;
@@ -45,12 +51,30 @@ public class Orders {
     private Orders(
             final int productCount,
             final int orderNumber,
+            final Member member,
             final Product product,
             final DeliveryInfo deliveryInfo
     ) {
         this.productCount = productCount;
         this.orderNumber = orderNumber;
+        this.member = member;
         this.product = product;
         this.deliveryInfo = deliveryInfo;
+    }
+
+    public static Orders createOrders(
+            final int productCount,
+            final int orderNumber,
+            final Member member,
+            final Product product,
+            final DeliveryInfo deliveryInfo
+    ) {
+        return Orders.builder()
+                .productCount(productCount)
+                .orderNumber(orderNumber)
+                .member(member)
+                .product(product)
+                .deliveryInfo(deliveryInfo)
+                .build();
     }
 }

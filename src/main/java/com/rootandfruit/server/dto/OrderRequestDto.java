@@ -7,6 +7,7 @@ import java.util.List;
 public record OrderRequestDto(
         String senderName,
         String senderPhone,
+        boolean isMarketingConsent,
         List<RecipientDto> recipientInfo
 ) {
 }

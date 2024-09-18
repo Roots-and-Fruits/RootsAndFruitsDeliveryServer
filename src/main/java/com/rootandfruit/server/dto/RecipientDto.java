@@ -9,6 +9,6 @@ public record RecipientDto(
         String recipientAddress,
         String recipientAddressDetail,
         List<ProductDto> productInfo,
-        String deliveryDate
+        LocalDate deliveryDate
 ) {
 }

@@ -64,5 +64,5 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           script: |
             cd ~
-            chmod +x ./deploy.sh  # 실행 권한 추가
+            sudo chmod +x ./deploy.sh  # 실행 권한 추가
             ./deploy.sh

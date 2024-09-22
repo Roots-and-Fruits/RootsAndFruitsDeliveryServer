@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OrdersService {
 
     private final MemberRepository memberRepository;
@@ -43,17 +42,17 @@ public class OrdersService {
             int currentOrderNumber = orderMetaData.incrementOrderNumberSequence();
 
             recipientDto.productInfo().forEach(productDto -> {
-                log.info(String.valueOf(productDto.productId()));
-                Product product = productRepository.findProductByIdOrThrow(productDto.productId());
-                Orders order = Orders.createOrders(
-                        productDto.productCount(),
-                        currentOrderNumber,
-                        member,
-                        product,
-                        deliveryInfo
-                );
-
-                ordersRepository.save(order);
+                if (productDto.productCount() > 0) {
+                    Product product = productRepository.findProductByIdOrThrow(productDto.productId());
+                    Orders order = Orders.createOrders(
+                            productDto.productCount(),
+                            currentOrderNumber,
+                            member,
+                            product,
+                            deliveryInfo
+                    );
+                    ordersRepository.save(order);
+                }
             });
         });
     }

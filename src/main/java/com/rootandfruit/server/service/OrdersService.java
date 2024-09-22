@@ -5,13 +5,17 @@ import com.rootandfruit.server.domain.Member;
 import com.rootandfruit.server.domain.OrderMetaData;
 import com.rootandfruit.server.domain.Orders;
 import com.rootandfruit.server.domain.Product;
+import com.rootandfruit.server.dto.OrderDto;
+import com.rootandfruit.server.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.repository.DeliveryInfoRepository;
 import com.rootandfruit.server.repository.MemberRepository;
 import com.rootandfruit.server.repository.OrderMetaDataRepository;
 import com.rootandfruit.server.repository.OrdersRepository;
 import com.rootandfruit.server.repository.ProductRepository;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,5 +59,30 @@ public class OrdersService {
                 }
             });
         });
+    }
+
+    @Transactional
+    public OrderNumberResponseDto getOrderByOrderNumber(int orderNumber) {
+        List<Orders> orders = ordersRepository.findByOrderNumberOrThrow(orderNumber);
+
+        // 주문번호에 해당하는 모든 주문 항목을 매핑
+        List<OrderDto> orderDtos = orders.stream()
+                .map(order -> OrderDto.of(
+                        order.getProduct().getProductName(),
+                        order.getProductCount(),
+                        order.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
+                        (order.getProduct().getPrice() * order.getProductCount())
+                ))
+                .collect(Collectors.toList());
+
+        int totalPrice = orderDtos.stream()
+                .mapToInt(OrderDto::price)
+                .sum();
+
+        return OrderNumberResponseDto.of(
+                orders.get(0).getDeliveryInfo().getSenderName(),
+                orderDtos,
+                totalPrice
+        );
     }
 }

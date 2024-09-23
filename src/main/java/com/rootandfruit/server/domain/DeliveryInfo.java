@@ -46,6 +46,9 @@ public class DeliveryInfo extends BaseTimeEntity {
     @Column(name = "recipient_address_detail", nullable = false)
     private String recipientAddressDetail;
 
+    @Column(name = "recipient_post_code", nullable = false)
+    private int recipientPostCode;
+
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
 
@@ -61,6 +64,7 @@ public class DeliveryInfo extends BaseTimeEntity {
             final String recipientPhone,
             final String recipientAddress,
             final String recipientAddressDetail,
+            final int recipientPostCode,
             final LocalDate deliveryDate,
             final  DeliveryStatus deliveryStatus
     ){
@@ -70,6 +74,7 @@ public class DeliveryInfo extends BaseTimeEntity {
         this.recipientPhone = recipientPhone;
         this.recipientAddress = recipientAddress;
         this.recipientAddressDetail = recipientAddressDetail;
+        this.recipientPostCode = recipientPostCode;
         this.deliveryDate = deliveryDate;
         this.deliveryStatus = deliveryStatus;
     }
@@ -82,6 +87,7 @@ public class DeliveryInfo extends BaseTimeEntity {
                 .recipientPhone(recipientDto.recipientPhone())
                 .recipientAddress(recipientDto.recipientAddress())
                 .recipientAddressDetail(recipientDto.recipientAddressDetail())
+                .recipientPostCode(recipientDto.recipientPostCode())
                 .deliveryDate(recipientDto.deliveryDate())
                 .deliveryStatus(DeliveryStatus.ORDER_ACCEPTED)
                 .build();

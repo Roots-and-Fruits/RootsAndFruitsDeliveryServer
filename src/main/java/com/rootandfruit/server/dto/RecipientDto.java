@@ -8,6 +8,7 @@ public record RecipientDto(
         String recipientPhone,
         String recipientAddress,
         String recipientAddressDetail,
+        int recipientPostCode,
         List<ProductDto> productInfo,
         LocalDate deliveryDate
 ) {

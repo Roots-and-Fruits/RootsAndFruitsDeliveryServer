@@ -1,18 +1,18 @@
 package com.rootandfruit.server.dto;
 
-public record OrderDto(
+public record OrderNumberDto(
         String productName,
          int productCount,
          String deliveryStatus,
          int price
 ) {
-    public static OrderDto of(
+    public static OrderNumberDto of(
             final String productName,
             final int productCount,
             final String deliveryStatus,
             final int price
     ) {
-        return new OrderDto(
+        return new OrderNumberDto(
                 productName, productCount, deliveryStatus, price
         );
     }

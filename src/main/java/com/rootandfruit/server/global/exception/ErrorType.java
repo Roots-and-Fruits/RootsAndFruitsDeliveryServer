@@ -18,6 +18,7 @@ public enum ErrorType {
     INVALID_MISSING_HEADER_ERROR(HttpStatus.BAD_REQUEST, "40003", "요청에 필요한 헤더값이 존재하지 않습니다."),
     INVALID_HTTP_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40004", "요청 형식이 허용된 형식과 다릅니다."),
     INVALID_HTTP_METHOD_ERROR(HttpStatus.BAD_REQUEST, "40005", "지원되지 않는 HTTP method 요청입니다."),
+    INVALID_DELIVERY_STATUS_ERROR(HttpStatus.BAD_REQUEST, "40006", "잘못된 배송상태가 입력되었습니다."),
 
     /**
      * 404 NOT FOUND

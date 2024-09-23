@@ -1,5 +1,7 @@
 package com.rootandfruit.server.domain;
 
+import com.rootandfruit.server.global.exception.CustomException;
+import com.rootandfruit.server.global.exception.ErrorType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,4 +20,13 @@ public enum DeliveryStatus {
     ORDER_SHIPPED("발송완료");
 
     private final String deliveryStatus;
+
+    public static DeliveryStatus fromString(String status) {
+        for (DeliveryStatus deliveryStatus : DeliveryStatus.values()) {
+            if (deliveryStatus.getDeliveryStatus().equals(status)) {
+                return deliveryStatus;
+            }
+        }
+        throw new CustomException(ErrorType.INVALID_DELIVERY_STATUS_ERROR);
+    }
 }

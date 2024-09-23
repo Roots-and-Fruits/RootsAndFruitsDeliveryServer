@@ -4,12 +4,12 @@ import java.util.List;
 
 public record OrderNumberResponseDto(
         String senderName,
-        List<OrderDto> orderList,
+        List<OrderNumberDto> orderList,
         int totalPrice
 ) {
     public static OrderNumberResponseDto of(
             final String senderName,
-            final List<OrderDto> orderList,
+            final List<OrderNumberDto> orderList,
             final int totalPrice
     ) {
         return new OrderNumberResponseDto(

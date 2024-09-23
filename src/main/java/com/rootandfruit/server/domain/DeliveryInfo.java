@@ -47,7 +47,7 @@ public class DeliveryInfo extends BaseTimeEntity {
     private String recipientAddressDetail;
 
     @Column(name = "recipient_post_code", nullable = false)
-    private int recipientPostCode;
+    private String recipientPostCode;
 
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
@@ -64,7 +64,7 @@ public class DeliveryInfo extends BaseTimeEntity {
             final String recipientPhone,
             final String recipientAddress,
             final String recipientAddressDetail,
-            final int recipientPostCode,
+            final String recipientPostCode,
             final LocalDate deliveryDate,
             final  DeliveryStatus deliveryStatus
     ){

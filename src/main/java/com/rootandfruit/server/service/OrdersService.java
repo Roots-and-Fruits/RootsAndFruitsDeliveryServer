@@ -18,6 +18,7 @@ import com.rootandfruit.server.repository.OrdersRepository;
 import com.rootandfruit.server.repository.ProductRepository;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -97,17 +98,70 @@ public class OrdersService {
             status = DeliveryStatus.fromString(deliveryStatus);
         }
 
-        List<Orders> orderlist = ordersRepository.searchOrders(orderReceivedDate, deliveryDate, productName, status);
+        // 주문 목록 조회 (여기서 각 주문은 하나의 배송 정보에 속함)
+        List<Orders> orderList = ordersRepository.searchOrders(orderReceivedDate, deliveryDate, productName, status);
 
-        return OrderResponseDto.of(orderlist.stream()
-                .map(orders -> OrderDto.of(
-                        orders.getDeliveryInfo().getSenderName(),
-                        orders.getDeliveryInfo().getRecipientName(),
-                        orders.getProduct().getProductName(),
-                        orders.getProductCount(),
-                        orders.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
-                        orders.getCreatedAt().toLocalDate(),
-                        orders.getDeliveryInfo().getDeliveryDate()
-                )).collect(Collectors.toList()));
+        // 배송 정보별로 주문을 묶고 OrderDto로 변환
+        Map<Long, List<Orders>> ordersByDeliveryInfo = orderList.stream()
+                .collect(Collectors.groupingBy(order -> order.getDeliveryInfo().getId()));
+
+        List<OrderDto> orderDtoList = ordersByDeliveryInfo.entrySet().stream()
+                .map(entry -> toOrderDto(entry.getKey(), entry.getValue())) // key는 배송정보 ID, value는 해당 배송에 속한 주문 리스트
+                .collect(Collectors.toList());
+
+        // OrderResponseDto로 반환
+        return OrderResponseDto.of(orderDtoList);
+    }
+
+
+    private OrderDto toOrderDto(Long deliveryId, List<Orders> orders) {
+        // 상품 목록 생성 (여러 주문의 상품 정보를 리스트로 변환)
+        List<String> productList = orders.stream()
+                .map(order -> order.getProduct().getProductName() + " " + order.getProductCount() + "EA")
+                .collect(Collectors.toList());
+
+        // 상품 수량 총합 (각 주문의 상품 수량을 합산)
+        int productTotalCount = orders.stream()
+                .mapToInt(Orders::getProductCount)
+                .sum();
+
+        Orders firstOrder = orders.get(0); // 같은 배송 정보에 속한 첫 번째 주문을 기준으로 배송 정보 가져옴
+
+        return OrderDto.of(
+                deliveryId,
+                firstOrder.getOrderNumber(),
+                firstOrder.getDeliveryInfo().getSenderName(),
+                firstOrder.getDeliveryInfo().getSenderPhone(),
+                firstOrder.getDeliveryInfo().getRecipientName(),
+                firstOrder.getDeliveryInfo().getRecipientPhone(),
+                firstOrder.getDeliveryInfo().getRecipientAddress(),
+                firstOrder.getDeliveryInfo().getRecipientAddressDetail(),
+                firstOrder.getDeliveryInfo().getRecipientPostCode(),
+                productList,
+                productTotalCount,
+                firstOrder.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
+                firstOrder.getCreatedAt().toLocalDate(),
+                firstOrder.getDeliveryInfo().getDeliveryDate()
+        );
+    }
+
+    @Transactional
+    public void pay(int orderNumber) {
+        List<Orders> orders = ordersRepository.findByOrderNumberOrThrow(orderNumber);
+
+        for (Orders order : orders) {
+            DeliveryInfo deliveryInfo = order.getDeliveryInfo();
+            deliveryInfo.changeDeliveryStatus(DeliveryStatus.PAYMENT_COMPLETED);
+        }
+    }
+
+    @Transactional
+    public void cancel(int orderNumber) {
+        List<Orders> orders = ordersRepository.findByOrderNumberOrThrow(orderNumber);
+
+        for (Orders order : orders) {
+            DeliveryInfo deliveryInfo = order.getDeliveryInfo();
+            deliveryInfo.changeDeliveryStatus(DeliveryStatus.PAYMENT_CANCELED);
+        }
     }
 }

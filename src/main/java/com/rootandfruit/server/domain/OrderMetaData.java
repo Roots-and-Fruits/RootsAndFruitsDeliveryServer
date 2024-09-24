@@ -32,4 +32,8 @@ public class OrderMetaData {
     public int incrementOrderNumberSequence() {
         return ++this.orderNumberSequence;
     }
+
+    public void changeAllowedDeliveryDays(int allowedDeliveryDays) {
+        this.allowedDeliveryDays = allowedDeliveryDays;
+    }
 }

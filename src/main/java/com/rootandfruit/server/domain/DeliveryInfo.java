@@ -92,4 +92,8 @@ public class DeliveryInfo extends BaseTimeEntity {
                 .deliveryStatus(DeliveryStatus.ORDER_ACCEPTED)
                 .build();
     }
+
+    public void changeDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
 }

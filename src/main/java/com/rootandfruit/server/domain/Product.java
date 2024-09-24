@@ -72,4 +72,8 @@ public class Product extends BaseTimeEntity {
     public void switchSailedStatus(boolean isSailed) {
         this.isSailed = !isSailed;
     }
+
+    public void deleteProduct() {
+        this.isDeleted = true;
+    }
 }

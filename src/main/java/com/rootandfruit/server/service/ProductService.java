@@ -5,6 +5,8 @@ import com.rootandfruit.server.dto.ProductRequestDto;
 import com.rootandfruit.server.dto.ProductResponseDto;
 import com.rootandfruit.server.dto.ProductSailedResponseDto;
 import com.rootandfruit.server.dto.ProductTmpDto;
+import com.rootandfruit.server.global.exception.CustomException;
+import com.rootandfruit.server.global.exception.ErrorType;
 import com.rootandfruit.server.repository.ProductRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +57,9 @@ public class ProductService {
     @Transactional
     public void changeProductSailedStatus(Long productId) {
         Product product = productRepository.findProductByIdOrThrow(productId);
-
+        if (product.isDeleted()) {
+            throw new CustomException(ErrorType.ALREADY_DELETED_PRODUCT);
+        }
         product.switchSailedStatus(product.isSailed());
     }
 
@@ -74,7 +78,9 @@ public class ProductService {
     @Transactional
     public void delete(Long productId) {
         Product product = productRepository.findProductByIdOrThrow(productId);
-
-        productRepository.delete(product);
+        if (product.isDeleted()) {
+            throw new CustomException(ErrorType.ALREADY_DELETED_PRODUCT);
+        }
+        product.deleteProduct();
     }
 }

@@ -19,6 +19,7 @@ public enum ErrorType {
     INVALID_HTTP_REQUEST_ERROR(HttpStatus.BAD_REQUEST, "40004", "요청 형식이 허용된 형식과 다릅니다."),
     INVALID_HTTP_METHOD_ERROR(HttpStatus.BAD_REQUEST, "40005", "지원되지 않는 HTTP method 요청입니다."),
     INVALID_DELIVERY_STATUS_ERROR(HttpStatus.BAD_REQUEST, "40006", "잘못된 배송상태가 입력되었습니다."),
+    ALREADY_DELETED_PRODUCT(HttpStatus.BAD_REQUEST, "40007", "이미 삭제된 상품입니다."),
 
     /**
      * 404 NOT FOUND

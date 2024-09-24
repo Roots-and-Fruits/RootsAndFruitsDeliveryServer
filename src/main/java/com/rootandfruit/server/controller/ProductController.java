@@ -4,6 +4,7 @@ import com.rootandfruit.server.dto.ProductRequestDto;
 import com.rootandfruit.server.dto.ProductResponseDto;
 import com.rootandfruit.server.dto.ProductSailedResponseDto;
 import com.rootandfruit.server.service.ProductService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -50,9 +51,9 @@ public class ProductController {
 
     @DeleteMapping("product/{productId}")
     public ResponseEntity<Void> deleteProduct(
-            @PathVariable Long productId
+            @RequestBody List<Long> productIds
     ) {
-        productService.delete(productId);
+        productService.delete(productIds);
         return ResponseEntity.ok().build();
     }
 }

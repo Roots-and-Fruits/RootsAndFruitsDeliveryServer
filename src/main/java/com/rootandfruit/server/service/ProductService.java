@@ -76,11 +76,11 @@ public class ProductService {
     }
 
     @Transactional
-    public void delete(Long productId) {
-        Product product = productRepository.findProductByIdOrThrow(productId);
-        if (product.isDeleted()) {
-            throw new CustomException(ErrorType.ALREADY_DELETED_PRODUCT);
+    public void delete(List<Long> productIds) {
+        List<Product> products = productRepository.findAllById(productIds);
+        if (products.isEmpty()) {
+            throw new CustomException(ErrorType.NOT_FOUND_PRODUCT_ERROR);
         }
-        product.deleteProduct();
+        products.forEach(Product::deleteProduct);
     }
 }

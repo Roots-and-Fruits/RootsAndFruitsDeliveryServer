@@ -27,6 +27,8 @@ public enum ErrorType {
     NOT_FOUND_PRODUCT_ERROR(HttpStatus.NOT_FOUND, "40401", "존재하지 않는 상품입니다."),
     NOT_FOUND_ORDER_META_DATA_ERROR(HttpStatus.NOT_FOUND, "40402", "주문 메타데이터가 존재하지 않습니다."),
     NOT_FOUND_ORDER_ERROR(HttpStatus.NOT_FOUND, "40403", "주문번호에 대한 주문내역이 존재하지 않습니다."),
+    NOT_FOUND_DELIVERY_INFO_ERROR(HttpStatus.NOT_FOUND, "40404", "주문번호에 대한 배송정보가 존재하지 않습니다."),
+    NOT_FOUND_DELIVERY_ERROR(HttpStatus.NOT_FOUND, "40401", "존재하지 않는 베송정보입니다."),
 
     /**
      * 500 INTERNAL SERVER ERROR

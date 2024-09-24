@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class OrdersController {
     @PostMapping("order")
     public ResponseEntity<Void> order(
             @RequestBody OrderRequestDto orderRequestDto
-            ){
+    ) {
         ordersService.order(orderRequestDto);
         return ResponseEntity.ok().build();
     }
@@ -34,7 +35,7 @@ public class OrdersController {
     @GetMapping("order/{orderNumber}")
     public ResponseEntity<OrderNumberResponseDto> order(
             @PathVariable int orderNumber
-    ){
+    ) {
         return ResponseEntity.ok(ordersService.getOrderByOrderNumber(orderNumber));
     }
 
@@ -52,5 +53,21 @@ public class OrdersController {
                 productName,
                 deliveryStatus
         ));
+    }
+
+    @PatchMapping("order/pay/{orderNumber}")
+    public ResponseEntity<Void> orderPay(
+            @PathVariable int orderNumber
+    ) {
+        ordersService.pay(orderNumber);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("order/cancel/{orderNumber}")
+    public ResponseEntity<Void> orderCancel(
+            @PathVariable int orderNumber
+    ) {
+        ordersService.cancel(orderNumber);
+        return ResponseEntity.ok().build();
     }
 }

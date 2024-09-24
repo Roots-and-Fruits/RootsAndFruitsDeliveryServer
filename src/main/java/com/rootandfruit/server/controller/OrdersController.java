@@ -38,7 +38,7 @@ public class OrdersController {
         return ResponseEntity.ok(ordersService.getOrderByOrderNumber(orderNumber));
     }
 
-    @GetMapping("/order")
+    @GetMapping("order")
     public ResponseEntity<OrderResponseDto> searchFieldPosition(
             @RequestParam(required = false) final LocalDate orderReceivedDate,
             @RequestParam(required = false) final LocalDate deliveryDate,

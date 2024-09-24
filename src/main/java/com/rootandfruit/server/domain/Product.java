@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,5 +33,47 @@ public class Product extends BaseTimeEntity {
     private boolean isSailed ;
 
     @Column(name = "is_deleted")
-    private boolean is_deleted ;
+    private boolean isDeleted ;
+
+    @Column(name = "is_trial")
+    private boolean isTrial;
+
+    @Builder
+    private Product(
+            final String productName,
+            final int price,
+            final boolean isTrial,
+            final boolean isSailed,
+            final boolean isDeleted
+    ) {
+        this.productName = productName;
+        this.price = price;
+        this.isTrial = isTrial;
+        this.isSailed = isSailed;
+        this.isDeleted = isDeleted;
+    }
+
+    public static Product createProduct(
+            final String productName,
+            final int price,
+            final boolean isTrial,
+            final boolean isSailed,
+            final boolean isDeleted
+    ) {
+        return Product.builder()
+                .productName(productName)
+                .price(price)
+                .isTrial(isTrial)
+                .isSailed(isSailed)
+                .isDeleted(isDeleted)
+                .build();
+    }
+
+    public void switchSailedStatus(boolean isSailed) {
+        this.isSailed = !isSailed;
+    }
+
+    public void deleteProduct() {
+        this.isDeleted = true;
+    }
 }

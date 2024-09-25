@@ -18,14 +18,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(3600);
     }
-
-    // 애플리케이션의 HTTP 메시지 컨버터를 완전히 새로 설정
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // 기존 컨버터들을 모두 제거 (외부 라이브러리의 코틀린 컨버터와 충돌을 피하기 위함)
-        converters.clear();
-
-        // Jackson 라이브러리를 사용하는 컨버터 추가
-        converters.add(new MappingJackson2HttpMessageConverter());
-    }
 }

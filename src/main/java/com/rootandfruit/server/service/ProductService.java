@@ -1,6 +1,7 @@
 package com.rootandfruit.server.service;
 
 import com.rootandfruit.server.domain.Product;
+import com.rootandfruit.server.dto.ProductAllDto;
 import com.rootandfruit.server.dto.ProductRequestDto;
 import com.rootandfruit.server.dto.ProductResponseDto;
 import com.rootandfruit.server.dto.ProductSailedResponseDto;
@@ -23,14 +24,14 @@ public class ProductService {
     public ProductResponseDto getAllProducts() {
         List<Product> products = productRepository.findAllActiveProducts();
 
-        List<ProductTmpDto> trialProducts = products.stream()
+        List<ProductAllDto> trialProducts = products.stream()
                 .filter(Product::isTrial)
-                .map(this::toProductTmpDto)
+                .map(this::toProductAllDto)
                 .toList();
 
-        List<ProductTmpDto> sailedProducts = products.stream()
+        List<ProductAllDto> sailedProducts = products.stream()
                 .filter(product -> !product.isTrial())
-                .map(this::toProductTmpDto)
+                .map(this::toProductAllDto)
                 .toList();
 
         return ProductResponseDto.of(trialProducts, sailedProducts);
@@ -58,6 +59,15 @@ public class ProductService {
                 product.getId(),
                 product.getProductName(),
                 product.getPrice()
+        );
+    }
+
+    private ProductAllDto toProductAllDto(Product product) {
+        return ProductAllDto.of(
+                product.getId(),
+                product.getProductName(),
+                product.getPrice(),
+                product.isSailed()
         );
     }
 

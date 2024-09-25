@@ -40,10 +40,17 @@ public class ProductService {
     public ProductSailedResponseDto getSailedProducts() {
         List<Product> products = productRepository.findSailedProducts();
 
-        List<ProductTmpDto> sailedProducts = products.stream()
+        List<ProductTmpDto> trialSailedProducts = products.stream()
+                .filter(Product::isTrial)
                 .map(this::toProductTmpDto)
                 .toList();
-        return ProductSailedResponseDto.of(sailedProducts);
+
+        List<ProductTmpDto> sailedProducts = products.stream()
+                .filter(product -> !product.isTrial())
+                .map(this::toProductTmpDto)
+                .toList();
+
+        return ProductSailedResponseDto.of(trialSailedProducts, sailedProducts);
     }
 
     private ProductTmpDto toProductTmpDto(Product product) {

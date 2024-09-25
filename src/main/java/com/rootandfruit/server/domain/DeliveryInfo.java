@@ -88,7 +88,7 @@ public class DeliveryInfo extends BaseTimeEntity {
                 .recipientAddress(recipientDto.recipientAddress())
                 .recipientAddressDetail(recipientDto.recipientAddressDetail())
                 .recipientPostCode(recipientDto.recipientPostCode())
-                .deliveryDate(recipientDto.deliveryDate())
+                .deliveryDate(recipientDto.deliveryDate().minusDays(1))
                 .deliveryStatus(DeliveryStatus.ORDER_ACCEPTED)
                 .build();
     }

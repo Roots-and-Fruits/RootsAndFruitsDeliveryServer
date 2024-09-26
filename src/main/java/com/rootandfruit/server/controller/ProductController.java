@@ -49,7 +49,7 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("product/{productId}")
+    @DeleteMapping("product")
     public ResponseEntity<Void> deleteProduct(
             @RequestBody List<Long> productIds
     ) {

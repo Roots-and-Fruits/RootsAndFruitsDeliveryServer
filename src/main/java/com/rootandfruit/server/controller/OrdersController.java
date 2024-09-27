@@ -5,7 +5,6 @@ import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
 import com.rootandfruit.server.service.OrdersService;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +24,10 @@ public class OrdersController {
     private final OrdersService ordersService;
 
     @PostMapping("order")
-    public ResponseEntity<Void> order(
+    public ResponseEntity<Integer> order(
             @RequestBody OrderRequestDto orderRequestDto
     ) {
-        ordersService.order(orderRequestDto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ordersService.order(orderRequestDto));
     }
 
     @GetMapping("order/{orderNumber}")

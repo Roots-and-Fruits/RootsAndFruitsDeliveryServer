@@ -21,11 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrdersService {
 
     private final MemberRepository memberRepository;
@@ -35,18 +37,18 @@ public class OrdersService {
     private final OrderMetaDataRepository orderMetaDataRepository;
 
     @Transactional
-    public void order(OrderRequestDto orderRequestDto){
+    public int order(OrderRequestDto orderRequestDto){
         Member member = Member.createMember(orderRequestDto.senderName(), orderRequestDto.senderPhone(),
                 orderRequestDto.isMarketingConsent());
         memberRepository.save(member);
+        log.info("membername: " + member.getName());
+        OrderMetaData orderMetaData = orderMetaDataRepository.findOrderMetaDataByIdOrThrow(1L);
+        int currentOrderNumber = orderMetaData.incrementOrderNumberSequence();
 
         orderRequestDto.recipientInfo().forEach(recipientDto -> {
 
             DeliveryInfo deliveryInfo = DeliveryInfo.createDeliveryInfo(orderRequestDto, recipientDto);
             deliveryInfoRepository.save(deliveryInfo);
-
-            OrderMetaData orderMetaData = orderMetaDataRepository.findOrderMetaDataByIdOrThrow(1L);
-            int currentOrderNumber = orderMetaData.incrementOrderNumberSequence();
 
             recipientDto.productInfo().forEach(productDto -> {
                 if (productDto.productCount() > 0) {
@@ -62,6 +64,7 @@ public class OrdersService {
                 }
             });
         });
+        return currentOrderNumber;
     }
 
     @Transactional(readOnly = true)

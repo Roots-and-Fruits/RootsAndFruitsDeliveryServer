@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class OrdersService {
 
     private final MemberRepository memberRepository;
@@ -41,7 +40,6 @@ public class OrdersService {
         Member member = Member.createMember(orderRequestDto.senderName(), orderRequestDto.senderPhone(),
                 orderRequestDto.isMarketingConsent());
         memberRepository.save(member);
-        log.info("membername: " + member.getName());
         OrderMetaData orderMetaData = orderMetaDataRepository.findOrderMetaDataByIdOrThrow(1L);
         int currentOrderNumber = orderMetaData.incrementOrderNumberSequence();
 

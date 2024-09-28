@@ -1,5 +1,6 @@
 package com.rootandfruit.server.controller;
 
+import com.rootandfruit.server.controller.docs.OrdersControllerDocs;
 import com.rootandfruit.server.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/")
 @RequiredArgsConstructor
-public class OrdersController {
+public class OrdersController implements OrdersControllerDocs {
 
     private final OrdersService ordersService;
 

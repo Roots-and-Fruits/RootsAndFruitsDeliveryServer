@@ -1,5 +1,6 @@
 package com.rootandfruit.server.controller;
 
+import com.rootandfruit.server.controller.docs.DeliveryControllerDocs;
 import com.rootandfruit.server.service.DeliveryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/v1/")
 @RequiredArgsConstructor
-public class DeliveryController {
+public class DeliveryController implements DeliveryControllerDocs {
 
     private final DeliveryService deliveryService;
 

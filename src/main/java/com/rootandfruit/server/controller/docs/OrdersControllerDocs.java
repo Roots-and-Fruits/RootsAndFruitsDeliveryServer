@@ -39,8 +39,7 @@ public interface OrdersControllerDocs {
     ResponseEntity<OrderNumberResponseDto> order(
             @Parameter(
                     description = "조회할 주문의 주문번호",
-                    required = true,
-                    schema = @Schema(type = "int", example = "1002")
+                    required = true
             )
             @PathVariable int orderNumber
     );
@@ -84,8 +83,7 @@ public interface OrdersControllerDocs {
     ResponseEntity<Void> orderPay(
             @Parameter(
                     description = "결제할 주문의 번호",
-                    required = true,
-                    schema = @Schema(type = "int", example = "1002")
+                    required = true
             )
             @PathVariable int orderNumber
     );
@@ -98,8 +96,7 @@ public interface OrdersControllerDocs {
     ResponseEntity<Void> orderCancel(
             @Parameter(
                     description = "취소할 주문의 번호",
-                    required = true,
-                    schema = @Schema(type = "int", example = "1002")
+                    required = true
             )
             @PathVariable int orderNumber
     );

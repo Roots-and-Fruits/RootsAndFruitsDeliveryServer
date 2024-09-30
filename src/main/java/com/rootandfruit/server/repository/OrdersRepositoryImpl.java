@@ -39,7 +39,7 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
     }
 
     private BooleanExpression ltDeliveryDate(LocalDate deliveryDate) {
-        return deliveryDate != null ? QDeliveryInfo.deliveryInfo.deliveryDate.before(deliveryDate) : null;
+        return deliveryDate != null ? QDeliveryInfo.deliveryInfo.deliveryDate.loe(deliveryDate) : null;
     }
 
     private BooleanExpression eqProductName(String productName) {

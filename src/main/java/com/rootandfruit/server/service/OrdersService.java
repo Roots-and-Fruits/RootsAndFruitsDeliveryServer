@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class OrdersService {
     private final OrderMetaDataRepository orderMetaDataRepository;
 
     @Transactional
-    public int order(OrderRequestDto orderRequestDto){
+    public int order(OrderRequestDto orderRequestDto) {
         Member member = Member.createMember(orderRequestDto.senderName(), orderRequestDto.senderPhone(),
                 orderRequestDto.isMarketingConsent());
         memberRepository.save(member);
@@ -164,5 +165,13 @@ public class OrdersService {
             DeliveryInfo deliveryInfo = order.getDeliveryInfo();
             deliveryInfo.changeDeliveryStatus(DeliveryStatus.PAYMENT_CANCELED);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Integer> getRecentTen() {
+        Pageable limitTen = PageRequest.of(0, 10);
+        List<Integer> orderNumbers = ordersRepository.findDistinctOrderNumbersByDeliveryStatus(DeliveryStatus.ORDER_ACCEPTED, limitTen);
+
+        return orderNumbers.stream().distinct().collect(Collectors.toList());
     }
 }

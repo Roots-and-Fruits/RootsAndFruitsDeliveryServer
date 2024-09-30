@@ -35,6 +35,7 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
                         eqProductName(productName),
                         eqDeliveryStatus(deliveryStatus)
                 )
+                .orderBy(QDeliveryInfo.deliveryInfo.deliveryDate.asc())
                 .fetch();
     }
 

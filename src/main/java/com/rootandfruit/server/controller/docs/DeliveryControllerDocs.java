@@ -41,8 +41,7 @@ public interface DeliveryControllerDocs {
     ResponseEntity<Void> changeDay(
             @Parameter(
                     description = "변경할 최대 배송 가능일 (예: 7일, 14일)",
-                    required = true,
-                    schema = @Schema(type = "int", example = "10")
+                    required = true
             )
             @PathVariable int allowedDeliveryDays
     );

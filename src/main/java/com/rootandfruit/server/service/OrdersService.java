@@ -21,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,7 @@ public class OrdersService {
     private final OrderMetaDataRepository orderMetaDataRepository;
 
     @Transactional
-    public int order(OrderRequestDto orderRequestDto){
+    public int order(OrderRequestDto orderRequestDto) {
         Member member = Member.createMember(orderRequestDto.senderName(), orderRequestDto.senderPhone(),
                 orderRequestDto.isMarketingConsent());
         memberRepository.save(member);
@@ -92,21 +93,27 @@ public class OrdersService {
 
     @Transactional(readOnly = true)
     public OrderResponseDto searchOrder(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
-                                        String deliveryStatus) {
-
+                                        String deliveryStatus, boolean isTrail) {
         DeliveryStatus status = null;
         if (deliveryStatus != null) {
             status = DeliveryStatus.fromString(deliveryStatus);
         }
 
         // 주문 목록 조회 (여기서 각 주문은 하나의 배송 정보에 속함)
-        List<Orders> orderList = ordersRepository.searchOrders(orderReceivedDate, deliveryDate, productName, status);
+        List<Orders> orderList = ordersRepository.searchOrders(orderReceivedDate, deliveryDate, productName, status,
+                isTrail);
 
         // 배송 정보별로 주문을 묶고 OrderDto로 변환
         Map<Long, List<Orders>> ordersByDeliveryInfo = orderList.stream()
                 .collect(Collectors.groupingBy(order -> order.getDeliveryInfo().getId()));
 
         List<OrderDto> orderDtoList = ordersByDeliveryInfo.entrySet().stream()
+                .sorted((entry1, entry2) -> {
+                    // 각 entry의 value(Orders 리스트)에서 첫 번째 주문의 deliveryDate로 비교
+                    LocalDate deliveryDate1 = entry1.getValue().get(0).getDeliveryInfo().getDeliveryDate();
+                    LocalDate deliveryDate2 = entry2.getValue().get(0).getDeliveryInfo().getDeliveryDate();
+                    return deliveryDate1.compareTo(deliveryDate2); // 오름차순 정렬
+                })
                 .map(entry -> toOrderDto(entry.getKey(), entry.getValue())) // key는 배송정보 ID, value는 해당 배송에 속한 주문 리스트
                 .collect(Collectors.toList());
 
@@ -164,5 +171,13 @@ public class OrdersService {
             DeliveryInfo deliveryInfo = order.getDeliveryInfo();
             deliveryInfo.changeDeliveryStatus(DeliveryStatus.PAYMENT_CANCELED);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<Integer> getRecentTen() {
+        Pageable limitTen = PageRequest.of(0, 10);
+        List<Integer> orderNumbers = ordersRepository.findDistinctOrderNumbersByDeliveryStatus(DeliveryStatus.ORDER_ACCEPTED, limitTen);
+
+        return orderNumbers.stream().distinct().collect(Collectors.toList());
     }
 }

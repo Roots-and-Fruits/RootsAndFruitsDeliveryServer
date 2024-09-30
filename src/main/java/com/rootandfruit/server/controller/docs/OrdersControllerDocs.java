@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
+import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -100,4 +101,10 @@ public interface OrdersControllerDocs {
             )
             @PathVariable int orderNumber
     );
+
+    @Operation(summary = "최근 접수 주문번호 조회", description = "최근 접수한 10개의 주문번호를 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "주분번호 조회 성공")
+    })
+    ResponseEntity<List<Integer>> getRecentOrderNumber();
 }

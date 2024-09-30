@@ -6,6 +6,7 @@ import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
 import com.rootandfruit.server.service.OrdersService;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,5 +69,10 @@ public class OrdersController implements OrdersControllerDocs {
     ) {
         ordersService.cancel(orderNumber);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("order/recent")
+    public ResponseEntity<List<Integer>> getRecentOrderNumber() {
+        return ResponseEntity.ok(ordersService.getRecentTen());
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrdersCustomRepository {
     List<Orders> searchOrders(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
-                              DeliveryStatus deliveryStatus);
+                              DeliveryStatus deliveryStatus, boolean isTrial);
 }

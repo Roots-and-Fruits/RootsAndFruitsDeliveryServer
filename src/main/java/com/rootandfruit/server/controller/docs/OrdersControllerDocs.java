@@ -56,24 +56,33 @@ public interface OrdersControllerDocs {
                     schema = @Schema(type = "string", format = "date", example = "2024-09-01")
             )
             @RequestParam(required = false) final LocalDate orderReceivedDate,
+
             @Parameter(
                     description = "배송 예정 날짜 (사실 출발 날짜임)",
                     required = false,
                     schema = @Schema(type = "string", format = "date", example = "2024-09-10")
             )
             @RequestParam(required = false) final LocalDate deliveryDate,
+
             @Parameter(
                     description = "주문 상품 이름",
                     required = false,
                     schema = @Schema(type = "string", example = "귤 몇kg")
             )
             @RequestParam(required = false) final String productName,
+
             @Parameter(
                     description = "배송 상태 (예: '접수완료', '결제완료', '결제취소', '발송완료')",
                     required = false,
                     schema = @Schema(type = "string", example = "접수완료")
             )
-            @RequestParam(required = false) final String deliveryStatus
+            @RequestParam(required = false) final String deliveryStatus,
+
+            @Parameter(
+                    description = "체험 상품 여부",
+                    required = false
+            )
+            @RequestParam(required = false) final boolean isTrial
     );
 
     @Operation(summary = "주문 결제 처리", description = "주문 번호를 이용해 주문을 결제 처리합니다.")

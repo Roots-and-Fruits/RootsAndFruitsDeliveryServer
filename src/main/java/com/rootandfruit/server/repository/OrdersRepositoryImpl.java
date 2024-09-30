@@ -22,7 +22,7 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
 
     @Override
     public List<Orders> searchOrders(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
-                                     DeliveryStatus deliveryStatus) {
+                                     DeliveryStatus deliveryStatus, boolean isTrial) {
         return queryFactory
                 .selectFrom(orders)
                 .join(orders.deliveryInfo, QDeliveryInfo.deliveryInfo)
@@ -33,7 +33,8 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
                                 .and(orders.createdAt.dayOfMonth().eq(orderReceivedDate.getDayOfMonth())) : null,
                         ltDeliveryDate(deliveryDate),
                         eqProductName(productName),
-                        eqDeliveryStatus(deliveryStatus)
+                        eqDeliveryStatus(deliveryStatus),
+                        eqIsTrial(isTrial)
                 )
                 .orderBy(QDeliveryInfo.deliveryInfo.deliveryDate.asc())
                 .fetch();
@@ -50,5 +51,9 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
     private BooleanExpression eqDeliveryStatus(DeliveryStatus deliveryStatus) {
         return deliveryStatus != null ? QDeliveryInfo.deliveryInfo.deliveryStatus.eq(
                 deliveryStatus) : null;
+    }
+
+    private BooleanExpression eqIsTrial(boolean isTrial) {
+        return QProduct.product.isTrial.eq(isTrial);
     }
 }

@@ -44,14 +44,16 @@ public class OrdersController implements OrdersControllerDocs {
             @RequestParam(required = false) final LocalDate orderReceivedDate,
             @RequestParam(required = false) final LocalDate deliveryDate,
             @RequestParam(required = false) final String productName,
-            @RequestParam(required = false) final String deliveryStatus
+            @RequestParam(required = false) final String deliveryStatus,
+            @RequestParam(required = false) final boolean isTrial
     ) {
 
         return ResponseEntity.ok(ordersService.searchOrder(
                 orderReceivedDate,
                 deliveryDate,
                 productName,
-                deliveryStatus
+                deliveryStatus,
+                isTrial
         ));
     }
 

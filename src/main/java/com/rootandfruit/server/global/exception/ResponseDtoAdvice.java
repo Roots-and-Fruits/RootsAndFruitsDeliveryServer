@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice(
         basePackages = "com.rootandfruit.server"
 )
+
+// TODO: 구현을 숨기고 이해를 어렵게한다는 이유로 곧 disable될 예정
 public class ResponseDtoAdvice implements ResponseBodyAdvice<Object> {
 
     @Override

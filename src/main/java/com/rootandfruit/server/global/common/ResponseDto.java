@@ -16,4 +16,5 @@ public record ResponseDto<T>(
     public static <T> ResponseDto<T> fail(ErrorType errorType) {
         return new ResponseDto<>(errorType.getCode(), null, errorType.getMessage());
     }
+
 }

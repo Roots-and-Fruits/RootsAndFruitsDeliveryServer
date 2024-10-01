@@ -5,6 +5,7 @@ import com.rootandfruit.server.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
 import com.rootandfruit.server.service.OrdersService;
+import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class OrdersController implements OrdersControllerDocs {
 
     @PostMapping("order")
     public ResponseEntity<Integer> order(
-            @RequestBody OrderRequestDto orderRequestDto
+            @Valid @RequestBody OrderRequestDto orderRequestDto
     ) {
         return ResponseEntity.ok(ordersService.order(orderRequestDto));
     }

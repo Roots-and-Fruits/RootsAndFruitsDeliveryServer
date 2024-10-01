@@ -15,4 +15,12 @@ public class GlobalExceptionHandler {
                 .status(e.getErrorType().getHttpStatus())
                 .body(e.getErrorType());
     }
+
+    // valid에서 발생한 예외
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorType> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .body(ErrorType.INVALID_HTTP_REQUEST_ERROR);
+    }
 }

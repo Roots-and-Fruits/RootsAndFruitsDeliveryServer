@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("v/admin")
 @RequiredArgsConstructor
 public class AdminController implements AdminControllerDocs {
     private final AdminService adminService;
 
-    @PostMapping("/create")
+    @PostMapping("api/v1/create")
     public ResponseEntity<Void> createAdmin(
             @RequestBody AdminCreateRequestDto adminCreateRequestDto
     ) {

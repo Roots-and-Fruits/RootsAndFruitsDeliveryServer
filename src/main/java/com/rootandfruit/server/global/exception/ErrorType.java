@@ -20,6 +20,7 @@ public enum ErrorType {
     INVALID_HTTP_METHOD_ERROR(HttpStatus.BAD_REQUEST, "40005", "지원되지 않는 HTTP method 요청입니다."),
     INVALID_DELIVERY_STATUS_ERROR(HttpStatus.BAD_REQUEST, "40006", "잘못된 배송상태가 입력되었습니다."),
     ALREADY_DELETED_PRODUCT(HttpStatus.BAD_REQUEST, "40007", "이미 삭제된 상품입니다."),
+    INVALID_ADMIN_PASSWORD(HttpStatus.BAD_REQUEST, "40008", "비밀번호가 일치하지 않습니다."),
 
     /**
      * 404 NOT FOUND
@@ -29,6 +30,7 @@ public enum ErrorType {
     NOT_FOUND_ORDER_ERROR(HttpStatus.NOT_FOUND, "40403", "주문번호에 대한 주문내역이 존재하지 않습니다."),
     NOT_FOUND_DELIVERY_INFO_ERROR(HttpStatus.NOT_FOUND, "40404", "주문번호에 대한 배송정보가 존재하지 않습니다."),
     NOT_FOUND_DELIVERY_ERROR(HttpStatus.NOT_FOUND, "40405", "존재하지 않는 베송정보입니다."),
+    NOT_FOUND_ADMIN_ERROR(HttpStatus.NOT_FOUND, "40406", "존재하지 않는 관리자 계정입니다."),
 
     /**
      * 500 INTERNAL SERVER ERROR

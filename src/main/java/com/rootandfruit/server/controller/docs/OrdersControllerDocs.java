@@ -3,6 +3,7 @@ package com.rootandfruit.server.controller.docs;
 import com.rootandfruit.server.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
+import com.rootandfruit.server.dto.RecentOrderResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -115,5 +116,5 @@ public interface OrdersControllerDocs {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "주분번호 조회 성공")
     })
-    ResponseEntity<List<Integer>> getRecentOrderNumber();
+    ResponseEntity<List<RecentOrderResponseDto>> getRecentOrderNumber();
 }

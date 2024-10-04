@@ -11,6 +11,7 @@ import com.rootandfruit.server.dto.OrderNumberDto;
 import com.rootandfruit.server.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
+import com.rootandfruit.server.dto.RecentOrderResponseDto;
 import com.rootandfruit.server.repository.DeliveryInfoRepository;
 import com.rootandfruit.server.repository.MemberRepository;
 import com.rootandfruit.server.repository.OrderMetaDataRepository;
@@ -174,10 +175,8 @@ public class OrdersService {
     }
 
     @Transactional(readOnly = true)
-    public List<Integer> getRecentTen() {
+    public List<RecentOrderResponseDto> getRecentTen() {
         Pageable limitTen = PageRequest.of(0, 10);
-        List<Integer> orderNumbers = ordersRepository.findDistinctOrderNumbersByDeliveryStatus(DeliveryStatus.ORDER_ACCEPTED, limitTen);
-
-        return orderNumbers.stream().distinct().collect(Collectors.toList());
+        return ordersRepository.findRecentOrdersByDeliveryStatus(DeliveryStatus.ORDER_ACCEPTED, limitTen);
     }
 }

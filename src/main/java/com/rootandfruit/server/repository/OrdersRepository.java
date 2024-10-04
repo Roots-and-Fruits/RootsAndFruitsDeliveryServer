@@ -2,6 +2,7 @@ package com.rootandfruit.server.repository;
 
 import com.rootandfruit.server.domain.DeliveryStatus;
 import com.rootandfruit.server.domain.Orders;
+import com.rootandfruit.server.dto.RecentOrderResponseDto;
 import com.rootandfruit.server.global.exception.CustomException;
 import com.rootandfruit.server.global.exception.ErrorType;
 import java.util.List;
@@ -21,11 +22,12 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersCus
         return orders;
     }
 
-    @Query("SELECT o.orderNumber FROM Orders o " +
+    @Query("SELECT new com.rootandfruit.server.dto.RecentOrderResponseDto(o.orderNumber, d.senderName) " +
+            "FROM Orders o " +
             "JOIN o.deliveryInfo d " +
             "WHERE d.deliveryStatus = :deliveryStatus " +
             "ORDER BY o.createdAt DESC")
-    List<Integer> findDistinctOrderNumbersByDeliveryStatus(
+    List<RecentOrderResponseDto> findRecentOrdersByDeliveryStatus(
             @Param("deliveryStatus") DeliveryStatus deliveryStatus,
             Pageable pageable
     );

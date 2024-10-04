@@ -4,6 +4,7 @@ import com.rootandfruit.server.controller.docs.OrdersControllerDocs;
 import com.rootandfruit.server.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.dto.OrderRequestDto;
 import com.rootandfruit.server.dto.OrderResponseDto;
+import com.rootandfruit.server.dto.RecentOrderResponseDto;
 import com.rootandfruit.server.service.OrdersService;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -75,7 +76,7 @@ public class OrdersController implements OrdersControllerDocs {
     }
 
     @GetMapping("order/recent")
-    public ResponseEntity<List<Integer>> getRecentOrderNumber() {
+    public ResponseEntity<List<RecentOrderResponseDto>> getRecentOrderNumber() {
         return ResponseEntity.ok(ordersService.getRecentTen());
     }
 }

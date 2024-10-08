@@ -1,6 +1,7 @@
 package com.rootandfruit.server.api.controller.docs;
 
 import com.rootandfruit.server.api.dto.AdminAuthenticateRequestDto;
+import com.rootandfruit.server.api.dto.AdminAuthenticateResponseDto;
 import com.rootandfruit.server.api.dto.AdminCreateRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,7 +34,7 @@ public interface AdminControllerDocs {
             @ApiResponse(responseCode = "40406", description = "관리자 아이디 불일치"),
             @ApiResponse(responseCode = "40008", description = "관리자 비밀번호 불일치")
     })
-    ResponseEntity<Void> authenticateAdmin(
+    ResponseEntity<AdminAuthenticateResponseDto> authenticateAdmin(
             @Parameter(
                     description = "관리자 아이디, 비밀번호",
                     required = true,

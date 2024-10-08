@@ -2,6 +2,7 @@ package com.rootandfruit.server.api.controller;
 
 import com.rootandfruit.server.api.controller.docs.AdminControllerDocs;
 import com.rootandfruit.server.api.dto.AdminAuthenticateRequestDto;
+import com.rootandfruit.server.api.dto.AdminAuthenticateResponseDto;
 import com.rootandfruit.server.api.dto.AdminCreateRequestDto;
 import com.rootandfruit.server.api.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +27,11 @@ public class AdminController implements AdminControllerDocs {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<Void> authenticateAdmin(
+    public ResponseEntity<AdminAuthenticateResponseDto> authenticateAdmin(
             @RequestBody AdminAuthenticateRequestDto adminAuthenticateRequestDto
-            ) {
-        adminService.authenticateAdmin(adminAuthenticateRequestDto);
-        return ResponseEntity.ok().build();
+            )
+    {
+
+        return ResponseEntity.ok(adminService.authenticateAdmin(adminAuthenticateRequestDto));
     }
 }

@@ -22,7 +22,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersCus
         return orders;
     }
 
-    @Query("SELECT new com.rootandfruit.server.dto.RecentOrderResponseDto(o.orderNumber, d.senderName) " +
+    @Query("SELECT new com.rootandfruit.server.api.dto.RecentOrderResponseDto(o.orderNumber, d.senderName) " +
             "FROM Orders o " +
             "JOIN o.deliveryInfo d " +
             "WHERE d.deliveryStatus = :deliveryStatus " +

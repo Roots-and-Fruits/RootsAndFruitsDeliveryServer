@@ -23,6 +23,11 @@ public enum ErrorType {
     INVALID_ADMIN_PASSWORD(HttpStatus.BAD_REQUEST, "40008", "비밀번호가 일치하지 않습니다."),
 
     /**
+     * 401 AUTHORIZATION FAIL
+     */
+    JWT_AUTHORIZATION_FAILED(HttpStatus.UNAUTHORIZED, "40101", "토큰 인증에 실패하였습니다"),
+
+    /**
      * 404 NOT FOUND
      */
     NOT_FOUND_PRODUCT_ERROR(HttpStatus.NOT_FOUND, "40401", "존재하지 않는 상품입니다."),

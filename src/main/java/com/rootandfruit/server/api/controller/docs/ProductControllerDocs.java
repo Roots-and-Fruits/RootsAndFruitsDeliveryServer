@@ -37,8 +37,7 @@ public interface ProductControllerDocs {
     ResponseEntity<Void> changeProduct(
             @Parameter(
                     description = "상태를 변경할 상품ID",
-                    required = true,
-                    schema = @Schema(type = "long")
+                    required = true
             )
             @PathVariable Long productId
     );

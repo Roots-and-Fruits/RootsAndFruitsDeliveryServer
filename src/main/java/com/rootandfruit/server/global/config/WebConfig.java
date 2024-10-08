@@ -24,8 +24,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
-                .addPathPatterns("/api/v1/delivery/**", "/api/v1/product/**", "/api/v1/order/pay/**",
+                .addPathPatterns("/api/v1/delivery/**", "/api/v1/product/**", "/api/v1/order/**",
                         "/api/v1/order/cancel/**", "/api/v1/admin/**")
-                .excludePathPatterns("/api/v1/admin/authenticate");
+                .excludePathPatterns("/api/v1/admin/authenticate", "/api/v1/delivery/max", "/api/v1/product/sailed",
+                        "/api/v1/product/all", "/api/v1/order", "/api/v1/order/{orderNumber}");
     }
 }

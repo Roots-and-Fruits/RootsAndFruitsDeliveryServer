@@ -175,8 +175,17 @@ public class OrdersService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecentOrderResponseDto> getRecentTen() {
-        Pageable limitTen = PageRequest.of(0, 10);
-        return ordersRepository.findRecentOrdersByDeliveryStatus(DeliveryStatus.ORDER_ACCEPTED, limitTen);
+    public List<RecentOrderResponseDto> getRecentOrders() {
+        List<RecentOrderResponseDto> recentOrders = ordersRepository.findRecentOrders();
+
+        return recentOrders.stream()
+                .limit(10)
+                .map(order -> RecentOrderResponseDto.of(
+                        order.orderNumber(),
+                        order.senderName(),
+                        DeliveryStatus.fromString(order.deliveryStatus())// 여기서는 DeliveryStatus 타입을 그대로 전달
+                ))
+                .collect(Collectors.toList());
     }
 }
+

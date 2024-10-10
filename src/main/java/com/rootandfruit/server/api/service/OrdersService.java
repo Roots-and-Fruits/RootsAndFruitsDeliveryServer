@@ -94,15 +94,14 @@ public class OrdersService {
 
     @Transactional(readOnly = true)
     public OrderResponseDto searchOrder(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
-                                        String deliveryStatus, boolean isTrail) {
+                                        String deliveryStatus) {
         DeliveryStatus status = null;
         if (deliveryStatus != null) {
             status = DeliveryStatus.fromString(deliveryStatus);
         }
 
         // 주문 목록 조회 (여기서 각 주문은 하나의 배송 정보에 속함)
-        List<Orders> orderList = ordersRepository.searchOrders(orderReceivedDate, deliveryDate, productName, status,
-                isTrail);
+        List<Orders> orderList = ordersRepository.searchOrders(orderReceivedDate, deliveryDate, productName, status);
 
         // 배송 정보별로 주문을 묶고 OrderDto로 변환
         Map<Long, List<Orders>> ordersByDeliveryInfo = orderList.stream()

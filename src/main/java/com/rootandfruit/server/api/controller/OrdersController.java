@@ -77,6 +77,6 @@ public class OrdersController implements OrdersControllerDocs {
 
     @GetMapping("order/recent")
     public ResponseEntity<List<RecentOrderResponseDto>> getRecentOrderNumber() {
-        return ResponseEntity.ok(ordersService.getRecentTen());
+        return ResponseEntity.ok(ordersService.getRecentOrders());
     }
 }

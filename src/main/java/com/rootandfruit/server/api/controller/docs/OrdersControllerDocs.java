@@ -77,13 +77,8 @@ public interface OrdersControllerDocs {
                     required = false,
                     schema = @Schema(type = "string", example = "접수완료")
             )
-            @RequestParam(required = false) final String deliveryStatus,
+            @RequestParam(required = false) final String deliveryStatus
 
-            @Parameter(
-                    description = "체험 상품 여부",
-                    required = false
-            )
-            @RequestParam(required = false) final boolean isTrial
     );
 
     @Operation(summary = "주문 결제 처리", description = "주문 번호를 이용해 주문을 결제 처리합니다.")

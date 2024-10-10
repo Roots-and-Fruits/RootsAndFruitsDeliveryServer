@@ -6,6 +6,7 @@ import com.rootandfruit.server.api.dto.RecentOrderResponseDto;
 import com.rootandfruit.server.global.exception.CustomException;
 import com.rootandfruit.server.global.exception.ErrorType;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,13 +23,9 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersCus
         return orders;
     }
 
-    @Query("SELECT new com.rootandfruit.server.api.dto.RecentOrderResponseDto(o.orderNumber, d.senderName) " +
+    @Query("SELECT DISTINCT new com.rootandfruit.server.api.dto.RecentOrderResponseDto(o.orderNumber, d.senderName, d.deliveryStatus) " +
             "FROM Orders o " +
             "JOIN o.deliveryInfo d " +
-            "WHERE d.deliveryStatus = :deliveryStatus " +
-            "ORDER BY o.createdAt DESC")
-    List<RecentOrderResponseDto> findRecentOrdersByDeliveryStatus(
-            @Param("deliveryStatus") DeliveryStatus deliveryStatus,
-            Pageable pageable
-    );
+            "ORDER BY o.orderNumber DESC")
+    List<RecentOrderResponseDto> findRecentOrders();
 }

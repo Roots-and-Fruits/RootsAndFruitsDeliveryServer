@@ -17,6 +17,10 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+        
         // 요청 헤더에서 Authorization 헤더 가져오기
         String authorizationHeader = request.getHeader("Authorization");
 

@@ -109,10 +109,10 @@ public class OrdersService {
 
         List<OrderDto> orderDtoList = ordersByDeliveryInfo.entrySet().stream()
                 .sorted((entry1, entry2) -> {
-                    // 각 entry의 value(Orders 리스트)에서 첫 번째 주문의 deliveryDate로 비교
-                    LocalDate deliveryDate1 = entry1.getValue().get(0).getDeliveryInfo().getDeliveryDate();
-                    LocalDate deliveryDate2 = entry2.getValue().get(0).getDeliveryInfo().getDeliveryDate();
-                    return deliveryDate1.compareTo(deliveryDate2); // 오름차순 정렬
+                    // 각 entry의 value(Orders 리스트)에서 첫 번째 주문의 orderNumber로 비교
+                    int orderNumber1 = entry1.getValue().get(0).getOrderNumber();
+                    int orderNumber2 = entry2.getValue().get(0).getOrderNumber();
+                    return Integer.compare(orderNumber2, orderNumber1); // 주문번호 내림차순 정렬
                 })
                 .map(entry -> toOrderDto(entry.getKey(), entry.getValue())) // key는 배송정보 ID, value는 해당 배송에 속한 주문 리스트
                 .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package com.rootandfruit.server.api.repository;
 
+import com.rootandfruit.server.api.domain.Admin;
 import com.rootandfruit.server.api.domain.DeliveryStatus;
 import com.rootandfruit.server.api.domain.Orders;
 import com.rootandfruit.server.api.dto.RecentOrderResponseDto;
@@ -7,6 +8,8 @@ import com.rootandfruit.server.global.exception.CustomException;
 import com.rootandfruit.server.global.exception.ErrorType;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.hibernate.query.Order;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +31,11 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersCus
             "JOIN o.deliveryInfo d " +
             "ORDER BY o.orderNumber DESC")
     List<RecentOrderResponseDto> findRecentOrders();
+
+    Optional<Orders> findOrdersById(Long id);
+
+    default Orders findOrdersByIdOrThrow(Long id) {
+        return findOrdersById(id)
+                .orElseThrow(() -> new CustomException(ErrorType.NOT_FOUND_ORDERS_ERROR));
+    }
 }

@@ -6,6 +6,7 @@ import com.rootandfruit.server.api.domain.Member;
 import com.rootandfruit.server.api.domain.OrderMetaData;
 import com.rootandfruit.server.api.domain.Orders;
 import com.rootandfruit.server.api.domain.Product;
+import com.rootandfruit.server.api.dto.NoteRequestDto;
 import com.rootandfruit.server.api.dto.OrderDto;
 import com.rootandfruit.server.api.dto.OrderNumberDto;
 import com.rootandfruit.server.api.dto.OrderNumberResponseDto;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Order;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -147,6 +149,7 @@ public class OrdersService {
                 : null;
 
         return OrderDto.of(
+                firstOrder.getId(),
                 deliveryId,
                 firstOrder.getOrderNumber(),
                 firstOrder.getDeliveryInfo().getSenderName(),
@@ -160,7 +163,8 @@ public class OrdersService {
                 productTotalCount,
                 firstOrder.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
                 formattedOrderReceivedDate,
-                firstOrder.getDeliveryInfo().getDeliveryDate()
+                firstOrder.getDeliveryInfo().getDeliveryDate(),
+                firstOrder.getNote()
         );
     }
 
@@ -196,6 +200,12 @@ public class OrdersService {
                         DeliveryStatus.fromString(order.deliveryStatus())// 여기서는 DeliveryStatus 타입을 그대로 전달
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void patchNote(NoteRequestDto noteRequestDto) {
+        Orders order = ordersRepository.findOrdersByIdOrThrow(noteRequestDto.orderId());
+        order.updateNote(noteRequestDto.note());
     }
 }
 

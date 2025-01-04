@@ -47,19 +47,24 @@ public class Orders extends BaseTimeEntity {
     @JoinColumn(name = "delivery_info_id", nullable = false)
     private DeliveryInfo deliveryInfo;
 
+    @Column(name = "note", nullable = false)
+    private String note;
+
     @Builder
     private Orders(
             final int productCount,
             final int orderNumber,
             final Member member,
             final Product product,
-            final DeliveryInfo deliveryInfo
+            final DeliveryInfo deliveryInfo,
+            String note
     ) {
         this.productCount = productCount;
         this.orderNumber = orderNumber;
         this.member = member;
         this.product = product;
         this.deliveryInfo = deliveryInfo;
+        this.note = note;
     }
 
     public static Orders createOrders(
@@ -75,6 +80,11 @@ public class Orders extends BaseTimeEntity {
                 .member(member)
                 .product(product)
                 .deliveryInfo(deliveryInfo)
+                .note("")
                 .build();
+    }
+
+    public void updateNote(String note) {
+        this.note = note;
     }
 }

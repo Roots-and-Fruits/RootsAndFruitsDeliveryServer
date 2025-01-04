@@ -36,6 +36,7 @@ public enum ErrorType {
     NOT_FOUND_DELIVERY_INFO_ERROR(HttpStatus.NOT_FOUND, "40404", "주문번호에 대한 배송정보가 존재하지 않습니다."),
     NOT_FOUND_DELIVERY_ERROR(HttpStatus.NOT_FOUND, "40405", "존재하지 않는 베송정보입니다."),
     NOT_FOUND_ADMIN_ERROR(HttpStatus.NOT_FOUND, "40406", "존재하지 않는 관리자 계정입니다."),
+    NOT_FOUND_ORDERS_ERROR(HttpStatus.NOT_FOUND, "40407", "아이디에 대한 주문내역이 존재하지 않습니다."),
 
     /**
      * 500 INTERNAL SERVER ERROR

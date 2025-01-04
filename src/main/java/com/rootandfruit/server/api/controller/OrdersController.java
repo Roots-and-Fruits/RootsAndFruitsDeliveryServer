@@ -1,6 +1,7 @@
 package com.rootandfruit.server.api.controller;
 
 import com.rootandfruit.server.api.controller.docs.OrdersControllerDocs;
+import com.rootandfruit.server.api.dto.NoteRequestDto;
 import com.rootandfruit.server.api.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.api.dto.OrderRequestDto;
 import com.rootandfruit.server.api.dto.OrderResponseDto;
@@ -10,6 +11,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -76,5 +78,13 @@ public class OrdersController implements OrdersControllerDocs {
     @GetMapping("order/recent")
     public ResponseEntity<List<RecentOrderResponseDto>> getRecentOrderNumber() {
         return ResponseEntity.ok(ordersService.getRecentOrders());
+    }
+
+    @PatchMapping("order/note")
+    public ResponseEntity<Void> patchOrderNote(
+            @RequestBody NoteRequestDto noteRequestDto
+            ) {
+        ordersService.patchNote(noteRequestDto);
+        return ResponseEntity.ok().build();
     }
 }

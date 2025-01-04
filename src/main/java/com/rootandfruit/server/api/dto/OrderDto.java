@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record OrderDto(
+        Long orderId,
         Long deliveryId,
         int orderNumber,
         String senderName,
@@ -17,9 +18,11 @@ public record OrderDto(
         int productTotalCount,
         String deliveryStatus,
         String orderReceivedDate,
-        LocalDate deliveryDate
+        LocalDate deliveryDate,
+        String note
 ) {
     public static OrderDto of(
+            final Long orderId,
             final Long deliveryId,
             final int orderNumber,
             final String senderName,
@@ -33,9 +36,11 @@ public record OrderDto(
             final int productTotalCount,
             final String deliveryStatus,
             final String orderReceivedDate,
-            LocalDate deliveryDate
+            LocalDate deliveryDate,
+            String note
     ) {
         return new OrderDto(
+                orderId,
                 deliveryId,
                 orderNumber,
                 senderName,
@@ -49,7 +54,8 @@ public record OrderDto(
                 productTotalCount,
                 deliveryStatus,
                 orderReceivedDate,
-                deliveryDate
+                deliveryDate,
+                note
         );
     }
 }

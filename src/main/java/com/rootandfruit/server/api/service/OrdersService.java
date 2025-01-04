@@ -141,6 +141,11 @@ public class OrdersService {
 
         Orders firstOrder = orders.get(0); // 같은 배송 정보에 속한 첫 번째 주문을 기준으로 배송 정보 가져옴
 
+        // orderReceivedDate 포맷팅
+        String formattedOrderReceivedDate = firstOrder.getCreatedAt() != null
+                ? firstOrder.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                : null;
+
         return OrderDto.of(
                 deliveryId,
                 firstOrder.getOrderNumber(),
@@ -154,7 +159,7 @@ public class OrdersService {
                 productList,
                 productTotalCount,
                 firstOrder.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
-                firstOrder.getCreatedAt().toLocalDate(),
+                formattedOrderReceivedDate,
                 firstOrder.getDeliveryInfo().getDeliveryDate()
         );
     }

@@ -16,7 +16,7 @@ public record OrderDto(
         List<String> productList,
         int productTotalCount,
         String deliveryStatus,
-        LocalDate orderReceivedDate,
+        String orderReceivedDate,
         LocalDate deliveryDate
 ) {
     public static OrderDto of(
@@ -32,7 +32,7 @@ public record OrderDto(
             final List<String> productList,
             final int productTotalCount,
             final String deliveryStatus,
-            final LocalDate orderReceivedDate,
+            final String orderReceivedDate,
             LocalDate deliveryDate
     ) {
         return new OrderDto(

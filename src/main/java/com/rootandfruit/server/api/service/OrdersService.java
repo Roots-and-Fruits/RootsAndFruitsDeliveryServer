@@ -18,6 +18,7 @@ import com.rootandfruit.server.api.repository.OrderMetaDataRepository;
 import com.rootandfruit.server.api.repository.OrdersRepository;
 import com.rootandfruit.server.api.repository.ProductRepository;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -73,12 +74,17 @@ public class OrdersService {
 
         // 주문번호에 해당하는 모든 주문 항목을 매핑
         List<OrderNumberDto> orderNumberDtos = orders.stream()
-                .map(order -> OrderNumberDto.of(
-                        order.getProduct().getProductName(),
-                        order.getProductCount(),
-                        order.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
-                        (order.getProduct().getPrice() * order.getProductCount())
-                ))
+                .map(order -> {
+                    String formattedOrderTime = order.getCreatedAt()
+                            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH시 mm분"));
+                    return OrderNumberDto.of(
+                            order.getProduct().getProductName(),
+                            order.getProductCount(),
+                            order.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
+                            (order.getProduct().getPrice() * order.getProductCount()),
+                            formattedOrderTime
+                    );
+                })
                 .collect(Collectors.toList());
 
         int totalPrice = orderNumberDtos.stream()

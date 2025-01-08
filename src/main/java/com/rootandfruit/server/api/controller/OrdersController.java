@@ -2,6 +2,7 @@ package com.rootandfruit.server.api.controller;
 
 import com.rootandfruit.server.api.controller.docs.OrdersControllerDocs;
 import com.rootandfruit.server.api.dto.NoteRequestDto;
+import com.rootandfruit.server.api.dto.OrderCursorResponseDto;
 import com.rootandfruit.server.api.dto.OrderNumberResponseDto;
 import com.rootandfruit.server.api.dto.OrderRequestDto;
 import com.rootandfruit.server.api.dto.OrderResponseDto;
@@ -86,5 +87,23 @@ public class OrdersController implements OrdersControllerDocs {
             ) {
         ordersService.patchNote(noteRequestDto);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("orders")
+    public ResponseEntity<OrderCursorResponseDto> searchFieldPositionByCursor(
+            @RequestParam(required = false) final LocalDate orderReceivedDate,
+            @RequestParam(required = false) final LocalDate deliveryDate,
+            @RequestParam(required = false) final String productName,
+            @RequestParam(required = false) final String deliveryStatus,
+            @RequestParam(required = false) Long cursorOrderId
+    ) {
+
+        return ResponseEntity.ok(ordersService.searchOrderByCursor(
+                orderReceivedDate,
+                deliveryDate,
+                productName,
+                deliveryStatus,
+                cursorOrderId
+        ));
     }
 }

@@ -7,6 +7,7 @@ import com.rootandfruit.server.api.domain.OrderMetaData;
 import com.rootandfruit.server.api.domain.Orders;
 import com.rootandfruit.server.api.domain.Product;
 import com.rootandfruit.server.api.dto.NoteRequestDto;
+import com.rootandfruit.server.api.dto.OrderCursorResponseDto;
 import com.rootandfruit.server.api.dto.OrderDto;
 import com.rootandfruit.server.api.dto.OrderNumberDto;
 import com.rootandfruit.server.api.dto.OrderNumberResponseDto;
@@ -207,5 +208,73 @@ public class OrdersService {
         Orders order = ordersRepository.findOrdersByIdOrThrow(noteRequestDto.orderId());
         order.updateNote(noteRequestDto.note());
     }
-}
 
+    @Transactional(readOnly = true)
+    public OrderCursorResponseDto searchOrderByCursor(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
+                                                      String deliveryStatus, Long cursorOrderId) {
+        DeliveryStatus status = null;
+        if (deliveryStatus != null) {
+            status = DeliveryStatus.fromString(deliveryStatus);
+        }
+
+        // 주문 목록 조회
+        List<Orders> orderList = ordersRepository.searchOrdersWithCursor(orderReceivedDate, deliveryDate, productName, status, cursorOrderId);
+
+        // 배송 정보별로 주문을 그룹화
+        Map<Long, List<Orders>> ordersByDeliveryInfo = orderList.stream()
+                .collect(Collectors.groupingBy(order -> order.getDeliveryInfo().getId()));
+
+        // OrderDto 리스트 생성
+        List<OrderDto> orderDtoList = ordersByDeliveryInfo.entrySet().stream()
+                .map(entry -> toScrollOrderDto(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+
+        // OrderDto 리스트를 orderId 내림차순으로 정렬
+        orderDtoList = orderDtoList.stream()
+                .sorted((o1, o2) -> Long.compare(o2.orderId(), o1.orderId())) // 정렬 추가
+                .toList();
+
+        // 다음 커서 계산
+        Long nextCursorOrderId = !orderList.isEmpty() ? orderList.get(orderList.size() - 1).getId() : null;
+
+        return OrderCursorResponseDto.of(orderDtoList, nextCursorOrderId);
+    }
+
+    private OrderDto toScrollOrderDto(Long deliveryId, List<Orders> orders) {
+        // 상품 목록 생성
+        List<String> productList = orders.stream()
+                .map(order -> order.getProduct().getProductName() + " " + order.getProductCount() + "EA")
+                .collect(Collectors.toList());
+
+        // 상품 수량 총합
+        int productTotalCount = orders.stream()
+                .mapToInt(Orders::getProductCount)
+                .sum();
+
+        Orders firstOrder = orders.get(0); // 같은 배송 정보에 속한 첫 번째 주문 사용
+
+        // 주문 날짜 포맷팅
+        String formattedOrderReceivedDate = firstOrder.getCreatedAt() != null
+                ? firstOrder.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+                : null;
+
+        return OrderDto.of(
+                firstOrder.getId(),
+                deliveryId,
+                firstOrder.getOrderNumber(),
+                firstOrder.getDeliveryInfo().getSenderName(),
+                firstOrder.getDeliveryInfo().getSenderPhone(),
+                firstOrder.getDeliveryInfo().getRecipientName(),
+                firstOrder.getDeliveryInfo().getRecipientPhone(),
+                firstOrder.getDeliveryInfo().getRecipientAddress(),
+                firstOrder.getDeliveryInfo().getRecipientAddressDetail(),
+                firstOrder.getDeliveryInfo().getRecipientPostCode(),
+                productList,
+                productTotalCount,
+                firstOrder.getDeliveryInfo().getDeliveryStatus().getDeliveryStatus(),
+                formattedOrderReceivedDate,
+                firstOrder.getDeliveryInfo().getDeliveryDate(),
+                firstOrder.getNote()
+        );
+    }
+}

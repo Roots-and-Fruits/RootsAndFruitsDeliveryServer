@@ -8,4 +8,7 @@ import java.util.List;
 public interface OrdersCustomRepository {
     List<Orders> searchOrders(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
                               DeliveryStatus deliveryStatus);
+
+    List<Orders> searchOrdersWithCursor(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
+                                        DeliveryStatus deliveryStatus, Long cursorOrderId);
 }

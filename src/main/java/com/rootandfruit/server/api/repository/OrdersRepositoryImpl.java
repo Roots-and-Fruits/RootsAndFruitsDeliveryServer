@@ -1,6 +1,7 @@
 package com.rootandfruit.server.api.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rootandfruit.server.api.domain.DeliveryStatus;
 import com.rootandfruit.server.api.domain.Orders;
@@ -37,6 +38,34 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
                 )
                 .orderBy(QDeliveryInfo.deliveryInfo.deliveryDate.asc())
                 .fetch();
+    }
+
+    @Override
+    public List<Orders> searchOrdersWithCursor(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
+                                               DeliveryStatus deliveryStatus, Long cursorOrderId) {
+        int limit = 50;
+        JPAQuery<Orders> query = queryFactory
+                .selectFrom(orders)
+                .join(orders.deliveryInfo, QDeliveryInfo.deliveryInfo)
+                .join(orders.product, QProduct.product)
+                .where(
+                        orderReceivedDate != null ? orders.createdAt.year().eq(orderReceivedDate.getYear())
+                                .and(orders.createdAt.month().eq(orderReceivedDate.getMonthValue()))
+                                .and(orders.createdAt.dayOfMonth().eq(orderReceivedDate.getDayOfMonth())) : null,
+                        ltDeliveryDate(deliveryDate),
+                        eqProductName(productName),
+                        eqDeliveryStatus(deliveryStatus),
+                        cursorCondition(cursorOrderId) // 커서 조건
+                )
+                .orderBy(orders.id.desc())
+                .limit(limit);
+        System.out.println("========================");
+        System.out.println(query.toString());
+        return query.fetch();
+    }
+
+    private BooleanExpression cursorCondition(Long cursorOrderId) {
+        return cursorOrderId != null ? orders.id.lt(cursorOrderId) : null;
     }
 
     private BooleanExpression ltDeliveryDate(LocalDate deliveryDate) {

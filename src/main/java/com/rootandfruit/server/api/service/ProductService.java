@@ -108,13 +108,18 @@ public class ProductService {
         if (products.isEmpty()) {
             throw new CustomException(ErrorType.NOT_FOUND_PRODUCT_ERROR);
         }
-        products.forEach(Product::deleteProduct);
+
+        products.forEach(product -> {
+            int deletedSequence = product.getSequence();
+            boolean isTrial = product.isTrial();
+            product.deleteProduct();
+            productRepository.decrementSequenceAfterDeletion(isTrial, deletedSequence);
+        });
     }
 
     @Transactional
     public void updateProductSequence(Long productId, int currentSequence, int newSequence) {
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productId));
+        Product product = productRepository.findProductByIdOrThrow(productId);
 
         if (currentSequence < newSequence) {
             productRepository.decrementSequenceRange(currentSequence, newSequence);

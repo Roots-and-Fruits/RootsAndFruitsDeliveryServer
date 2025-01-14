@@ -34,4 +34,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT COALESCE(MAX(p.sequence), 0) FROM Product p WHERE p.isTrial = :isTrial")
     int findMaxSequenceByIsTrial(@Param("isTrial") boolean isTrial);
+
+    @Modifying
+    @Query("UPDATE Product p SET p.sequence = p.sequence - 1 " +
+            "WHERE p.isDeleted = false AND p.isTrial = :isTrial AND p.sequence > :deletedSequence")
+    void decrementSequenceAfterDeletion(@Param("isTrial") boolean isTrial, @Param("deletedSequence") int deletedSequence);
 }

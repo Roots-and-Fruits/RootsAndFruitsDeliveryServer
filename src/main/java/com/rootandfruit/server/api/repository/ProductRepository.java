@@ -31,4 +31,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Modifying
     @Query("UPDATE Product p SET p.sequence = p.sequence + 1 WHERE p.sequence < :currentSequence AND p.sequence >= :newSequence")
     void incrementSequenceRange(@Param("currentSequence") int currentSequence, @Param("newSequence") int newSequence);
+
+    @Query("SELECT COALESCE(MAX(p.sequence), 0) FROM Product p WHERE p.isTrial = :isTrial")
+    int findMaxSequenceByIsTrial(@Param("isTrial") boolean isTrial);
 }

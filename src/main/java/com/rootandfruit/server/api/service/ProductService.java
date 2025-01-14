@@ -82,7 +82,14 @@ public class ProductService {
         product.switchSailedStatus(product.isSailed());
     }
 
+    @Transactional
     public void createNewProduct(ProductRequestDto productRequestDto) {
+        // isTrial 여부에 따라 최대 sequence 값 조회
+        int maxSequence = productRepository.findMaxSequenceByIsTrial(productRequestDto.isTrial());
+
+        // 새로운 sequence 값
+        int newSequence = maxSequence + 1;
+
         productRepository.save(
                 Product.createProduct(
                         productRequestDto.productName(),
@@ -90,7 +97,7 @@ public class ProductService {
                         productRequestDto.isTrial(),
                         false,
                         false,
-                        2000
+                        newSequence
                 )
         );
     }

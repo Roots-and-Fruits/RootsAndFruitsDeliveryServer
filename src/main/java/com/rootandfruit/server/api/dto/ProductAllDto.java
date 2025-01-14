@@ -4,19 +4,21 @@ public record ProductAllDto(
         Long productId,
         String productName,
         int productPrice,
-        boolean isSailed
+        boolean isSailed,
+        int sequence
 
 ) {
     public static ProductAllDto of(
             final Long productId,
             final String productName,
             final int productPrice,
-            final boolean isSailed
+            final boolean isSailed,
+            final int sequence
 
     ) {
 
         return new ProductAllDto(
-                productId, productName, productPrice, isSailed
+                productId, productName, productPrice, isSailed, sequence
         );
     }
 }

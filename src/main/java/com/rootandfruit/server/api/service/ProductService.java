@@ -58,7 +58,8 @@ public class ProductService {
         return ProductTmpDto.of(
                 product.getId(),
                 product.getProductName(),
-                product.getPrice()
+                product.getPrice(),
+                product.getSequence()
         );
     }
 
@@ -67,7 +68,8 @@ public class ProductService {
                 product.getId(),
                 product.getProductName(),
                 product.getPrice(),
-                product.isSailed()
+                product.isSailed(),
+                product.getSequence()
         );
     }
 

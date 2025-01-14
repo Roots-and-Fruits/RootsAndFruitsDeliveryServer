@@ -9,6 +9,7 @@ import com.rootandfruit.server.api.dto.ProductTmpDto;
 import com.rootandfruit.server.global.exception.CustomException;
 import com.rootandfruit.server.global.exception.ErrorType;
 import com.rootandfruit.server.api.repository.ProductRepository;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,13 @@ public class ProductService {
 
         List<ProductAllDto> trialProducts = products.stream()
                 .filter(Product::isTrial)
+                .sorted(Comparator.comparingInt(Product::getSequence))
                 .map(this::toProductAllDto)
                 .toList();
 
         List<ProductAllDto> sailedProducts = products.stream()
                 .filter(product -> !product.isTrial())
+                .sorted(Comparator.comparingInt(Product::getSequence))
                 .map(this::toProductAllDto)
                 .toList();
 
@@ -43,11 +46,13 @@ public class ProductService {
 
         List<ProductTmpDto> trialSailedProducts = products.stream()
                 .filter(Product::isTrial)
+                .sorted(Comparator.comparingInt(Product::getSequence))
                 .map(this::toProductTmpDto)
                 .toList();
 
         List<ProductTmpDto> sailedProducts = products.stream()
                 .filter(product -> !product.isTrial())
+                .sorted(Comparator.comparingInt(Product::getSequence))
                 .map(this::toProductTmpDto)
                 .toList();
 

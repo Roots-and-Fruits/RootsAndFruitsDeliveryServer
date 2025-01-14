@@ -210,15 +210,18 @@ public class OrdersService {
     }
 
     @Transactional(readOnly = true)
-    public OrderCursorResponseDto searchOrderByCursor(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
-                                                      String deliveryStatus, Long cursorOrderId) {
+    public OrderCursorResponseDto searchOrderByCursor(LocalDate orderReceivedDate, LocalDate deliveryDate,
+                                                      String productName,
+                                                      String deliveryStatus, Long cursorOrderId, String senderName,
+                                                      String recipientName, Integer orderNumber) {
         DeliveryStatus status = null;
         if (deliveryStatus != null) {
             status = DeliveryStatus.fromString(deliveryStatus);
         }
 
         // 주문 목록 조회
-        List<Orders> orderList = ordersRepository.searchOrdersWithCursor(orderReceivedDate, deliveryDate, productName, status, cursorOrderId);
+        List<Orders> orderList = ordersRepository.searchOrdersWithCursor(orderReceivedDate, deliveryDate, productName,
+                status, cursorOrderId, senderName, recipientName, orderNumber);
 
         // 배송 정보별로 주문을 그룹화
         Map<Long, List<Orders>> ordersByDeliveryInfo = orderList.stream()

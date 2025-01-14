@@ -95,7 +95,10 @@ public class OrdersController implements OrdersControllerDocs {
             @RequestParam(required = false) final LocalDate deliveryDate,
             @RequestParam(required = false) final String productName,
             @RequestParam(required = false) final String deliveryStatus,
-            @RequestParam(required = false) Long cursorOrderId
+            @RequestParam(required = false) Long cursorOrderId,
+            @RequestParam(required = false) final String senderName,
+            @RequestParam(required = false) final String recipientName,
+            @RequestParam(required = false) final Integer orderNumber
     ) {
 
         return ResponseEntity.ok(ordersService.searchOrderByCursor(
@@ -103,7 +106,10 @@ public class OrdersController implements OrdersControllerDocs {
                 deliveryDate,
                 productName,
                 deliveryStatus,
-                cursorOrderId
+                cursorOrderId,
+                senderName,
+                recipientName,
+                orderNumber
         ));
     }
 }

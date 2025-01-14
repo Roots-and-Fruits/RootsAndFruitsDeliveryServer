@@ -42,7 +42,8 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
 
     @Override
     public List<Orders> searchOrdersWithCursor(LocalDate orderReceivedDate, LocalDate deliveryDate, String productName,
-                                               DeliveryStatus deliveryStatus, Long cursorOrderId) {
+                                               DeliveryStatus deliveryStatus, Long cursorOrderId, String senderName,
+                                               String recipientName, Integer orderNumber) {
         int limit = 50;
         JPAQuery<Orders> query = queryFactory
                 .selectFrom(orders)
@@ -55,13 +56,26 @@ public class OrdersRepositoryImpl implements OrdersCustomRepository{
                         ltDeliveryDate(deliveryDate),
                         eqProductName(productName),
                         eqDeliveryStatus(deliveryStatus),
-                        cursorCondition(cursorOrderId) // 커서 조건
+                        cursorCondition(cursorOrderId),
+                        eqSenderName(senderName),
+                        eqRecipientName(recipientName),
+                        eqOrderNumber(orderNumber)
                 )
                 .orderBy(orders.id.desc())
                 .limit(limit);
-        System.out.println("========================");
-        System.out.println(query.toString());
         return query.fetch();
+    }
+
+    private BooleanExpression eqSenderName(String senderName) {
+        return senderName != null ? QDeliveryInfo.deliveryInfo.senderName.eq(senderName) : null;
+    }
+
+    private BooleanExpression eqRecipientName(String recipientName) {
+        return recipientName != null ? QDeliveryInfo.deliveryInfo.recipientName.eq(recipientName) : null;
+    }
+
+    private BooleanExpression eqOrderNumber(Integer orderNumber) {
+        return orderNumber != null ? orders.orderNumber.eq(orderNumber) : null;
     }
 
     private BooleanExpression cursorCondition(Long cursorOrderId) {

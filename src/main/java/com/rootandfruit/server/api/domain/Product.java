@@ -38,19 +38,25 @@ public class Product extends BaseTimeEntity {
     @Column(name = "is_trial")
     private boolean isTrial;
 
+    @Column(name = "sequence", nullable = false)
+    private int sequence; // 새로운 컬럼 추가
+
+
     @Builder
     private Product(
             final String productName,
             final int price,
             final boolean isTrial,
             final boolean isSailed,
-            final boolean isDeleted
+            final boolean isDeleted,
+            final int sequence
     ) {
         this.productName = productName;
         this.price = price;
         this.isTrial = isTrial;
         this.isSailed = isSailed;
         this.isDeleted = isDeleted;
+        this.sequence = sequence;
     }
 
     public static Product createProduct(
@@ -58,7 +64,8 @@ public class Product extends BaseTimeEntity {
             final int price,
             final boolean isTrial,
             final boolean isSailed,
-            final boolean isDeleted
+            final boolean isDeleted,
+            final int sequence
     ) {
         return Product.builder()
                 .productName(productName)
@@ -66,6 +73,7 @@ public class Product extends BaseTimeEntity {
                 .isTrial(isTrial)
                 .isSailed(isSailed)
                 .isDeleted(isDeleted)
+                .sequence(sequence)
                 .build();
     }
 
@@ -75,5 +83,9 @@ public class Product extends BaseTimeEntity {
 
     public void deleteProduct() {
         this.isDeleted = true;
+    }
+
+    public void updateSequence(int newSequence) {
+        this.sequence = newSequence;
     }
 }

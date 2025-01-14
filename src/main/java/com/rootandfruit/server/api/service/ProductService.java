@@ -87,7 +87,8 @@ public class ProductService {
                         productRequestDto.productPrice(),
                         productRequestDto.isTrial(),
                         false,
-                        false
+                        false,
+                        2000
                 )
         );
     }
@@ -99,5 +100,20 @@ public class ProductService {
             throw new CustomException(ErrorType.NOT_FOUND_PRODUCT_ERROR);
         }
         products.forEach(Product::deleteProduct);
+    }
+
+    @Transactional
+    public void updateProductSequence(Long productId, int currentSequence, int newSequence) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found with id: " + productId));
+
+        if (currentSequence < newSequence) {
+            productRepository.decrementSequenceRange(currentSequence, newSequence);
+        } else if (currentSequence > newSequence) {
+            productRepository.incrementSequenceRange(currentSequence, newSequence);
+        }
+
+        product.updateSequence(newSequence);
+        productRepository.save(product);
     }
 }

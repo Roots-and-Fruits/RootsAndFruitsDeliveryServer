@@ -6,7 +6,9 @@ import com.rootandfruit.server.global.exception.ErrorType;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findProductById(Long id);
@@ -21,4 +23,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE p.isDeleted = false and p.isSailed = true")
     List<Product> findSailedProducts();
+
+    @Modifying
+    @Query("UPDATE Product p SET p.sequence = p.sequence - 1 WHERE p.sequence > :currentSequence AND p.sequence <= :newSequence")
+    void decrementSequenceRange(@Param("currentSequence") int currentSequence, @Param("newSequence") int newSequence);
+
+    @Modifying
+    @Query("UPDATE Product p SET p.sequence = p.sequence + 1 WHERE p.sequence < :currentSequence AND p.sequence >= :newSequence")
+    void incrementSequenceRange(@Param("currentSequence") int currentSequence, @Param("newSequence") int newSequence);
 }

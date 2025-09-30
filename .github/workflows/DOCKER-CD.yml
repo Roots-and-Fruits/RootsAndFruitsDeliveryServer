@@ -47,8 +47,8 @@ jobs:
 
       - name: docker image 빌드 및 푸시
         run: |
-          docker build --platform linux/amd64 -t rootandfruit/docker .
-          docker push rootandfruit/docker
+          docker build --platform linux/amd64 -t yeolmae/docker .
+          docker push yeolmae/docker
         working-directory: ${{ env.working-directory }}
 
   cd:
